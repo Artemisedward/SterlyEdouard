@@ -1,0 +1,53 @@
+<p align="center">
+  <img src="https://i.imgur.com/CtGfsq8.png" alt="osTicket logo"/>
+</p>
+
+# Understanding DNS with Practical Examples
+
+The purpose of this lab is to provide a practical understanding of DNS. We will be conducting a few experiments with DNS that will help us comprehend the functioning of DNS.
+
+## Environments and Technologies
+
+- Microsoft Azure (Virtual Machines/Compute)
+- Remote Desktop
+- DNS
+
+## Operating Systems
+
+- Windows 10 (21H2)
+
+## Prerequisites
+
+- Active Directory Virtual Machine
+- Client Machine joined to the domain
+
+## Experiments with DNS
+
+In this task, we will be examining DNS A-Records on server DC-1. A-Records map hostnames to IP addresses. Our goal is to create an A-record for "mainframe" and have it point to DC-1's private IP address.
+
+Without setting the DNS record, attempting to ping "mainframe" will fail. When we do ping "mainframe", Client-1 will first check its DNS cache, then its local host file, and finally the DNS server.
+
+### Create A-Record
+
+To create the A-record, follow these steps:
+
+1. Go to Server Manager → Tools → DNS → DC-1 → Forward lookup zones → mydomain.com.
+2. Right-click and create a new A record.
+3. Give it the title "mainframe".
+4. Set the same IP address as your machine's Private IP address.
+
+After creating the A-record, if we return to the client machine and ping "mainframe", we should receive a reply.
+
+### Flush DNS Cache
+
+Next, we'll change the record address of "mainframe" to 8.8.8.8. However, when we return to the client machine and attempt to ping "mainframe", it will still use the old address. This is because the DNS cache needs to be cleared with the command "ipconfig /flushdns".
+
+After running the command "ipconfig /flushdns", the DNS cache will be cleared, and when we attempt to ping "mainframe" again, the address of the new record will be displayed.
+
+### Configure a CNAME Record
+
+Lastly, we'll configure a CNAME record that points the host "search" to "www.google.com". If we attempt to ping "search", it won't be found.
+
+To fix this, we'll need to go back to the DNS tool on DC-1 and create the CNAME record for "search".
+
+Once the CNAME record is created, we can ping "search" and it will correctly resolve to "www.google.com".
